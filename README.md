@@ -31,8 +31,14 @@ The program includes the following advanced features:
 - Editing a chosen listing, with the chosen attribute to be changed,
 - Searching through listings and displaying only those that meet specific criteria, such as production year or price.
 
+# Main Menu
+
 ![Main menu](/screenshots/main-menu.png)
 
+# Displaying owners
+
 ![Displaying owners](/screenshots/display-owners.png)
+
+# Displaying listings
 
 ![Displaying listings](/screenshots/display-listings.png)
