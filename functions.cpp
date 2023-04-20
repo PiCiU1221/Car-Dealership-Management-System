@@ -1,4 +1,4 @@
-#include "header.h"
+ï»¿#include "header.h"
 
 using namespace std;
 
@@ -744,8 +744,8 @@ void searchThroughListings(Dealership& dealership) {
 		checker = find(searchedIndexes.begin(), searchedIndexes.end(), indexToChoose);
 
 		if (checker == searchedIndexes.end()) {
-			cout << "\n    Podany indeks jest nieprawid³owy";
-			cout << "\n    Spróbuj jeszcze raz\n";
+			cout << "\n    Chosen index doesn't exist";
+			cout << "\n    Try again\n";
 		}
 		// Repeat until the correct index is entered
 	} while (checker == searchedIndexes.end());
