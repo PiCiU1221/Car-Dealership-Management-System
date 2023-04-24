@@ -30,23 +30,19 @@ void menu(Dealership& dealership) {
 		cout << "  7 ] Delete a listing\n";
 		cout << "  8 ] Display listings\n";
 		cout << "  9 ] Search through listings\n";
-		cout << " 10 ] Display amount of owners and listings\n\n";
-		cout << " 11 ] Write to a file\n";
-		cout << " 12 ] Write from a file\n\n";
+		cout << " 10 ] Confirm sale\n";
+		cout << " 11 ] Display amount of owners and listings\n\n";
+		cout << " 12 ] Write to a file\n";
+		cout << " 13 ] Write from a file\n\n";
 		cout << "  0 ] Exit\n\n";
 
 		cin.clear();
 		cin >> choice;
 
-		if (!(choice >= 0 && choice <= 12)) {
-			cout << "\n========================================================\n\n";
-			cout << "    An incorrect number has been entered\n\n";
-			cout << "    Press ENTER to go back to the menu\n";
-			cout << "\n========================================================\n";
-			cin.ignore();
-			cin.get();
+		if (!(choice >= 0 && choice <= 13)) {
+			displayIncorrectNumberMessage();
 		}
-	} while (!(choice >= 0 && choice <= 12));
+	} while (!(choice >= 0 && choice <= 13));
 
 	switch (choice) {
 	case 0:
@@ -80,21 +76,19 @@ void menu(Dealership& dealership) {
 		searchThroughListings(dealership);
 		break;
 	case 10:
-		usageOfAnOverloadedOperator(dealership);
+		confirmSale(dealership);
 		break;
 	case 11:
-		writingToAFile(dealership);
+		usageOfAnOverloadedOperator(dealership);
 		break;
 	case 12:
+		writingToAFile(dealership);
+		break;
+	case 13:
 		enteringDataFromAFile(dealership);
 		break;
 	default:
-		cout << "\n========================================================\n\n";
-		cout << "    An incorrect number has been entered\n\n";
-		cout << "    Press ENTER to go back to the menu\n";
-		cout << "\n========================================================\n";
-		cin.ignore();
-		cin.get();
+		displayIncorrectNumberMessage();
 		break;
 	}
 }

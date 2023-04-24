@@ -1,4 +1,4 @@
-﻿#include "header.h"
+#include "header.h"
 
 using namespace std;
 
@@ -29,7 +29,7 @@ void generateRandomizedOwnersAndListings(Dealership& dealership) {
 		dealership.addListing(brand[randomBrand], model[randomBrand][generateInteger(0, 2)], generateInteger(1995, 2020),
 			plate[generateInteger(0, 3)] + " " + to_string(generateInteger(10000, 99999)),
 			generateInteger(70, 250), fuelType[generateInteger(0, 2)], gearboxType[generateInteger(0, 1)],
-			driveType[generateInteger(0, 2)], generateInteger(5, 12), randomOwner, generateInteger(5000, 99999));
+			driveType[generateInteger(0, 2)], generateInteger(5, 12), randomOwner, generateInteger(5000, 99999), generateInteger(0, 1));
 	}
 
 	cout << "\n========================================================\n\n";
@@ -197,11 +197,7 @@ void displayOwners(Dealership& dealership) {
 		cout << ownerCity << " | " << endl;
 	}
 
-	cout << "\n========================================================\n\n";
-	cout << "    Press ENTER to go back to the menu\n";
-	cout << "\n========================================================\n";
-	cin.ignore();
-	cin.get();
+	displayPressEnterToMenu();
 }
 
 // Function to add a new listing after selecting the owner from the list
@@ -698,23 +694,42 @@ void deleteUserListing(Dealership& dealership) {
 // Function that displays all listings
 void displayAllListings(Dealership& dealership) {
 	int listingsSize = dealership.getListingsSize();
-	for (int i = 0; i < listingsSize; i++) {
-		if (countNumbers(i) >= 2) {
-			cout << "======================= " << i + 1 << ". Listing ========================" << endl;
-		}
-		else {
-			cout << "======================== " << i + 1 << ". Listing ========================" << endl;
-		}
 
-		dealership.displayListing(i);
-		cout << "                         Owner: " << dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(i)) << endl << endl << endl;
+	cout << "==========================================================" << endl;
+	cout << "                       Active Listings                    " << endl;
+	cout << "==========================================================" << endl << endl;
+	for (int i = 0; i < listingsSize; i++) {
+		if (dealership.isSoldListing(i) == false) {
+			if (countNumbers(i + 1) >= 2) {
+				cout << "======================= " << i + 1 << ". Listing ========================" << endl;
+			}
+			else {
+				cout << "======================== " << i + 1 << ". Listing ========================" << endl;
+			}
+
+			dealership.displayListing(i);
+			cout << "                         Owner: " << dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(i)) << endl << endl << endl;
+		}
 	}
 
-	cout << "\n========================================================\n\n";
-	cout << "    Press ENTER to go back to the menu\n";
-	cout << "\n========================================================\n";
-	cin.ignore();
-	cin.get();
+	cout << "==========================================================" << endl;
+	cout << "                      Expired Listings                    " << endl;
+	cout << "==========================================================" << endl << endl;
+	for (int i = 0; i < listingsSize; i++) {
+		if (dealership.isSoldListing(i) == true) {
+			if (countNumbers(i) >= 2) {
+				cout << "======================= " << i + 1 << ". Listing ========================" << endl;
+			}
+			else {
+				cout << "======================== " << i + 1 << ". Listing ========================" << endl;
+			}
+
+			dealership.displayListing(i);
+			cout << "                         Owner: " << dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(i)) << endl << endl << endl;
+		}
+	}
+
+	displayPressEnterToMenu();
 }
 
 // This function allows user to search through all the listing on the chosen criteria
@@ -824,11 +839,118 @@ void searchThroughListings(Dealership& dealership) {
 		}
 	}
 
-	cout << "\n========================================================\n\n";
-	cout << "    Press ENTER to go back to the menu\n";
-	cout << "\n========================================================\n";
-	cin.ignore();
-	cin.get();
+	displayPressEnterToMenu();
+}
+
+//  Function that changes the listing status to "sold"
+void confirmSale(Dealership& dealership) {
+	int indexToChoose = 0;
+	vector<int> searchedIndexes;
+
+	// checker variable stores information whether the array is empty or not
+	auto checker = searchedIndexes.begin();
+	bool flag = false;
+
+	int listingsSize = dealership.getListingsSize();
+	for (int i = 0; i < listingsSize; i++) {
+		if (dealership.isSoldListing(i) == false) {
+			searchedIndexes.push_back(i);
+
+			if (flag == false) {
+				cout << "\n| Index |      Owner     |    Brand   |    Model   |  Price  |" << endl;
+				cout << "--------------------------------------------------------------" << endl;
+			}
+
+			cout << "| ";
+			for (int j = 1; j <= 5 - countNumbers(i); j++) {
+				cout << " ";
+			}
+			cout << i << " | ";
+
+			string ownerName = dealership.getOwnerNameWithIndex(i);
+			size_t ownerNameSize = ownerName.size();
+
+			for (int j = 1; j <= 14 - ownerNameSize; j++) {
+				cout << " ";
+			}
+			cout << ownerName << " | ";
+
+			string brand = dealership.getBrandWithIndex(i);
+			size_t brandSize = brand.size();
+
+			for (int j = 1; j <= 10 - brandSize; j++) {
+				cout << " ";
+			}
+			cout << brand << " | ";
+
+			string model = dealership.getModelWithIndex(i);
+			size_t modelSize = model.size();
+
+			for (int j = 1; j <= 10 - modelSize; j++) {
+				cout << " ";
+			}
+			cout << model << " | ";
+
+			int price = dealership.getListingPriceWithIndex(i);
+			size_t priceSize = countNumbers(price);
+
+			for (int j = 1; j <= 7 - priceSize; j++) {
+				cout << " ";
+			}
+			cout << price << " | " << endl;
+
+			flag = true;
+		}
+	}
+	if (flag == false) {
+		cout << "\n========================================================\n\n";
+		cout << "    Array of listings is empty\n\n";
+		cout << "    Press ENTER to go back to the menu\n";
+		cout << "\n========================================================\n";
+		cin.ignore();
+		cin.get();
+	}
+	else {
+		do {
+			cout << "\n    Enter a listing index to change to sold: ";
+			cin >> indexToChoose;
+			// checker variable stores information whether the entered index has been previously searched and displayed
+			checker = find(searchedIndexes.begin(), searchedIndexes.end(), indexToChoose);
+
+			if (checker == searchedIndexes.end()) {
+				cout << "\n    Chosen index doesn't exist";
+				cout << "\n    Try again\n";
+			}
+			// Repeat until the correct index is entered
+		} while (checker == searchedIndexes.end());
+
+		string choice;
+
+		do {
+			cout << "\n========================================================\n\n";
+			cout << "    Are you sure you want to mark this listing as sold?\n\n";
+			cout << "    Enter [Y/N]\n";
+			cout << "\n========================================================\n";
+			cin >> choice;
+
+			if (choice != "Y" && choice != "N") {
+				cout << "\n    You can choose only 'Y', or 'N'";
+				cout << "\n    Try again\n";
+			}
+			// Repeat until the correct index is entered
+		} while (choice != "Y" && choice != "N");
+
+		if (choice == "Y") {
+			dealership.setSoldWithIndex(indexToChoose);
+
+			cout << "\n========================================================\n\n";
+			cout << "    Selected listing has been updated to sold\n\n";
+			cout << "    Press ENTER to go back to the menu\n";
+			cout << "\n========================================================\n";
+			cin.ignore();
+			cin.get();
+		}
+	}
 }
 
 // Usage of overloaded operator '<<' for a 'Dealership' object
@@ -865,6 +987,24 @@ void enteringDataFromAFile(Dealership& dealership) {
 
 	cout << "\n========================================================\n\n";
 	cout << "    Data has been updated from the 'Dealership.txt' file\n\n";
+	cout << "    Press ENTER to go back to the menu\n";
+	cout << "\n========================================================\n";
+	cin.ignore();
+	cin.get();
+}
+
+// Functions that handle repeated outputs to the terminal
+void displayIncorrectNumberMessage() {
+	cout << "\n========================================================\n\n";
+	cout << "    An incorrect number has been entered\n\n";
+	cout << "    Press ENTER to go back to the menu\n";
+	cout << "\n========================================================\n";
+	cin.ignore();
+	cin.get();
+}
+
+void displayPressEnterToMenu() {
+	cout << "\n========================================================\n\n";
 	cout << "    Press ENTER to go back to the menu\n";
 	cout << "\n========================================================\n";
 	cin.ignore();

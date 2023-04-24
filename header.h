@@ -141,10 +141,35 @@ public:
 	Listing& operator=(const Listing&);
 };
 
+// Class representing a sold listing using inheritance
+class SoldListing : public Listing {
+private:
+	bool sold;
+
+public:
+	SoldListing() : Listing(), sold(false) {}
+	SoldListing(std::string brand, std::string model, int productionYear, std::string registrationNumber,
+		int horsePower, std::string fuelType, std::string gearboxType,
+		std::string driveType, int fuelConsumption, int ownerIndex, int price)
+		: Listing(brand, model, productionYear, registrationNumber, horsePower, fuelType, gearboxType,
+			driveType, fuelConsumption, ownerIndex, price), sold(false) {}
+	SoldListing(std::string brand, std::string model, int productionYear, std::string registrationNumber,
+		int horsePower, std::string fuelType, std::string gearboxType,
+		std::string driveType, int fuelConsumption, int ownerIndex, int price, bool sold)
+		: Listing(brand, model, productionYear, registrationNumber, horsePower, fuelType, gearboxType,
+			driveType, fuelConsumption, ownerIndex, price), sold(sold) {}
+
+	// Getter for the sold variable
+	bool isSold() const { return sold; }
+
+	// Setter for the sold variable
+	void setSold() { this->sold = true; }
+};
+
 class Dealership {
 	Owner** owners;
 	int ownersSize;
-	Listing** listings;
+	SoldListing** listings;
 	int listingsSize;
 public:
 	Dealership();
@@ -156,6 +181,8 @@ public:
 	void deleteOwner(int index);
 	void addListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower,
 		std::string fuelType, std::string gearboxType, std::string driveType, int fuelConsumption, int ownerIndex, int price);
+	void addListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower,
+		std::string fuelType, std::string gearboxType, std::string driveType, int fuelConsumption, int ownerIndex, int price, bool sold);
 	void deleteListing(int index);
 
 	// Getters
@@ -181,6 +208,8 @@ public:
 
 	int getListingPriceWithIndex(int i) const { return listings[i]->getPrice(); }
 
+	bool isSoldListing(int i) const { return listings[i]->isSold(); }
+
 	// Setters
 	void setBrandWithIndex(std::string brand, int i) { listings[i]->setBrand(brand); }
 	void setModelWithIndex(std::string model, int i) { listings[i]->setModel(model); }
@@ -193,9 +222,11 @@ public:
 	void setFuelConsumptionWithIndex(int fuelConsumption, int i) { listings[i]->setFuelConsumption(fuelConsumption); }
 
 	void setPriceWithIndex(int price, int i) { listings[i]->setPrice(price); }
+	void setSoldWithIndex(int i) { listings[i]->setSold(); }
 
 	int countOwnersListings(int index) const;
 	void displayListing(int i) { listings[i]->displayData(); }
+
 	friend std::ostream& operator<<(std::ostream&, const Dealership&);
 	friend std::ofstream& operator<<(std::ofstream&, const Dealership&);
 	friend std::ifstream& operator>>(std::ifstream& in, Dealership& dealership);
@@ -203,6 +234,7 @@ public:
 	Dealership& operator=(const Dealership&);
 };
 
+// Functions used in the main.cpp file
 void generateRandomizedOwnersAndListings(Dealership& dealership);
 void addOwnerByUser(Dealership& dealership);
 void deleteOwnerByUser(Dealership& dealership);
@@ -212,8 +244,13 @@ void editListing(Dealership& dealership);
 void deleteUserListing(Dealership& dealership);
 void displayAllListings(Dealership& dealership);
 void searchThroughListings(Dealership& dealership);
+void confirmSale(Dealership& dealership);
 void usageOfAnOverloadedOperator(Dealership& dealership);
 void writingToAFile(Dealership& dealership);
 void enteringDataFromAFile(Dealership& dealership);
+
+// Functions that handle repeated outputs to the terminal
+void displayIncorrectNumberMessage();
+void displayPressEnterToMenu();
 
 #endif // HEADER_H

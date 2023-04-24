@@ -137,9 +137,9 @@ Dealership::Dealership(const Dealership& other) : ownersSize(other.ownersSize), 
 		owners[i] = new Owner(*(other.owners[i]));
 	}
 
-	listings = new Listing * [listingsSize];
+	listings = new SoldListing * [listingsSize];
 	for (int i = 0; i < listingsSize; i++) {
-		listings[i] = new Listing(*(other.listings[i]));
+		listings[i] = new SoldListing(*(other.listings[i]));
 	}
 }
 
@@ -194,14 +194,32 @@ void Dealership::deleteOwner(int index) {
 
 void Dealership::addListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower,
 	std::string fuelType, std::string gearboxType, std::string driveType, int fuelConsumption, int ownerIndex, int price) {
-	Listing** newOgloszenia = new Listing * [listingsSize + 1];
+	SoldListing** newOgloszenia = new SoldListing * [listingsSize + 1];
 
 	for (int i = 0; i < listingsSize; i++) {
 		newOgloszenia[i] = listings[i];
 	}
 
-	newOgloszenia[listingsSize] = new Listing(brand, model, productionYear, registrationNumber,
+	newOgloszenia[listingsSize] = new SoldListing(brand, model, productionYear, registrationNumber,
 		horsePower, fuelType, gearboxType, driveType, fuelConsumption, ownerIndex, price);
+
+	delete[] listings;
+
+	listings = newOgloszenia;
+
+	listingsSize++;
+}
+
+void Dealership::addListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower,
+	std::string fuelType, std::string gearboxType, std::string driveType, int fuelConsumption, int ownerIndex, int price, bool sold) {
+	SoldListing** newOgloszenia = new SoldListing * [listingsSize + 1];
+
+	for (int i = 0; i < listingsSize; i++) {
+		newOgloszenia[i] = listings[i];
+	}
+
+	newOgloszenia[listingsSize] = new SoldListing(brand, model, productionYear, registrationNumber,
+		horsePower, fuelType, gearboxType, driveType, fuelConsumption, ownerIndex, price, sold);
 
 	delete[] listings;
 
@@ -261,6 +279,7 @@ std::ofstream& operator<<(std::ofstream& out, const Dealership& dealership) {
 		out << dealership.getDriveTypeWithIndex(i) << '\n';
 		out << dealership.getFuelConsumptionWithIndex(i) << '\n';
 		out << dealership.getListingPriceWithIndex(i) << '\n';
+		out << dealership.isSoldListing(i) << '\n';
 	}
 	return out;
 }
@@ -269,7 +288,7 @@ std::ofstream& operator<<(std::ofstream& out, const Dealership& dealership) {
 std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 	int ownersSize, listingsSize;
 	std::string name, city, street, registrationNumber, brand, model, fuelType, gearboxType, driveType;
-	int productionYear, horsePower, fuelConsumption, ownerIndex, number;
+	int productionYear, horsePower, fuelConsumption, ownerIndex, number, sold;
 	int price;
 
 	// Read the number of owners
@@ -305,9 +324,10 @@ std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 		std::getline(in, driveType);
 		in >> fuelConsumption;
 		in >> price;
+		in >> sold;
 		in.ignore(); // Ignore the newline character
 		dealership.addListing(brand, model, productionYear, registrationNumber, horsePower,
-			fuelType, gearboxType, driveType, fuelConsumption, ownerIndex, price);
+			fuelType, gearboxType, driveType, fuelConsumption, ownerIndex, price, sold);
 	}
 
 	return in;
