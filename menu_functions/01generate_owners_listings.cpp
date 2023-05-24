@@ -23,12 +23,13 @@ void generateRandomizedOwnersAndListings(Dealership& dealership) {
 		int randomBrand = generateInteger(0, 4);
 		// Use static_cast to ensure that the compiler can evaluate the difference between the two integers at the runtime
 		int randomOwner = generateInteger(0, static_cast<int>(dealership.getOwnersSize()) - 1);
+		string ownerName = dealership.getOwnerNameWithIndex(randomOwner);
 
 		// Use a dealership object method to add a new car listing using randomized values from the arrays visible in the content.cpp file
 		dealership.addCarListing(carBrand[randomBrand], carModel[randomBrand][generateInteger(0, 2)], generateInteger(1995, 2023),
 			plate[generateInteger(0, 3)] + " " + to_string(generateInteger(10000, 99999)), generateInteger(70, 250), fuelType[generateInteger(0, 2)],
 			gearboxType[generateInteger(0, 1)], driveType[generateInteger(0, 1)], generateInteger(5, 12), generateInteger(250, 600),
-			generateInteger(2, 5), bodyType[generateInteger(0, 6)], randomOwner, generateInteger(5000, 99999), generateInteger(0, 1));
+			generateInteger(2, 5), bodyType[generateInteger(0, 6)], ownerName, generateInteger(5000, 99999), generateInteger(0, 1));
 	}
 
 	int randomNumberOfMotorcycleListings = generateInteger(5, 10);
@@ -38,11 +39,12 @@ void generateRandomizedOwnersAndListings(Dealership& dealership) {
 		vehicleType type = MOTORCYCLE;
 		int randomBrand = generateInteger(0, 4);
 		int randomOwner = generateInteger(0, static_cast<int>(dealership.getOwnersSize()) - 1);
+		string ownerName = dealership.getOwnerNameWithIndex(randomOwner);
 
 		dealership.addMotorcycleListing(motorcycleBrand[randomBrand], motorcycleModel[randomBrand][generateInteger(0, 2)], generateInteger(1995, 2023),
 			plate[generateInteger(0, 3)] + " " + to_string(generateInteger(10000, 99999)), generateInteger(70, 250), fuelType[generateInteger(0, 2)],
 			gearboxType[generateInteger(0, 1)], driveType[generateInteger(0, 1)], generateInteger(2, 7), generateInteger(250, 1000),
-			generateInteger(150, 300), motorcycleType[generateInteger(0, 4)], brakeType[generateInteger(0, 1)], randomOwner, generateInteger(5000, 99999),
+			generateInteger(150, 300), motorcycleType[generateInteger(0, 4)], brakeType[generateInteger(0, 1)], ownerName, generateInteger(5000, 99999),
 			generateInteger(0, 1));
 	}
 

@@ -36,7 +36,7 @@ void editListing(Dealership& dealership) {
 
 		cout << "| " << i << right << setfill(' ') << setw(5 - to_string(i).size()) << "" << " | ";
 
-		string ownerName = dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(vehicleChoice, i));
+		string ownerName = dealership.getListingOwnerNameWithIndex(vehicleChoice, i);
 		cout << ownerName << right << setfill(' ') << setw(12 - ownerName.size()) << "" << " | ";
 
 		string brand = dealership.getBrandWithIndex(vehicleChoice, i);
@@ -73,7 +73,7 @@ void editListing(Dealership& dealership) {
 		} while (checker == searchedIndexes.end());
 
 		if (vehicleChoice == CAR) {
-			cout << "\n\n    Selected owner has a name: " << dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(vehicleChoice, indexToChoose)) << "\n\n";
+			cout << "\n\n    Selected owner has a name: " << dealership.getListingOwnerNameWithIndex(vehicleChoice, indexToChoose) << "\n\n";
 
 			string input;
 

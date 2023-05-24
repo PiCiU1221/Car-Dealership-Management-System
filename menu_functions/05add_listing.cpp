@@ -95,9 +95,11 @@ void addListingByUser(Dealership& dealership) {
 
 		cin >> price;
 
+		string ownerName = dealership.getOwnerNameWithIndex(indexToChoose);
+
 		// stoi() function to convert string to int
 		dealership.addCarListing(brand, model, stoi(productionYear), registrationNumber, stoi(horsePower), fuelType, gearboxType,
-			driveType, stoi(fuelConsumption), stoi(trunkCapacity), stoi(seatNumber), bodyType, indexToChoose, price, false);
+			driveType, stoi(fuelConsumption), stoi(trunkCapacity), stoi(seatNumber), bodyType, ownerName, price, false);
 	}
 	// Chosen type is MOTORCYCLE
 	else if (dealership.getChosenVehicleType() == MOTORCYCLE) {
@@ -135,9 +137,11 @@ void addListingByUser(Dealership& dealership) {
 
 		cin >> price;
 
+		string ownerName = dealership.getOwnerNameWithIndex(indexToChoose);
+
 		// stoi() function to convert string to int
 		dealership.addMotorcycleListing(brand, model, stoi(productionYear), registrationNumber, stoi(horsePower), fuelType, gearboxType,
-			driveType, stoi(fuelConsumption), stoi(engineSize), stoi(topSpeed), type, brakeType, indexToChoose, price, false);
+			driveType, stoi(fuelConsumption), stoi(engineSize), stoi(topSpeed), type, brakeType, ownerName, price, false);
 	}
 
 	cout << "\n" << setfill('=') << setw(68) << "=\n\n";

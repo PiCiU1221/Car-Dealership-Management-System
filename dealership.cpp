@@ -12,10 +12,6 @@ Dealership& Dealership::instance() {
 }
 
 Dealership::~Dealership() {
-	for (auto owner : owners) {
-		delete owner;
-	}
-
 	for (auto listing : carListings) {
 		delete listing;
 	}
@@ -25,57 +21,64 @@ Dealership::~Dealership() {
 	}
 }
 
-void Dealership::addOwner(string name, string city, string ulica, int numer) {
-	owners.push_back(new Owner(name, city, ulica, numer));
+void Dealership::addOwner(string name, string city, string street, int number) {
+	ownersMap.insert(std::make_pair(name, Owner(name, city, street, number)));
 }
 
 void Dealership::deleteOwner(int index) {
-	if (index >= owners.size()) {
+	auto it = ownersMap.begin();
+	advance(it, index);
+	string ownerName = it->first;
+
+	if (it != ownersMap.end()) {
+		for (int i = 0; i < carListings.size(); i++) {
+			if (getListingOwnerNameWithIndex(CAR, i) == ownerName) {
+				deleteListing(CAR, i);
+			}
+		}
+
+		for (int i = 0; i < motorcycleListings.size(); i++) {
+			if (getListingOwnerNameWithIndex(MOTORCYCLE, i) == ownerName) {
+				deleteListing(MOTORCYCLE, i);
+			}
+		}
+
+		ownersMap.erase(it);
+	}
+	else {
 		cout << "Owner with this index doesn't exist\n";
 		return;
 	}
-
-	for (int i = 0; i < carListings.size(); i++) {
-		if (getListingOwnerIndexWithIndex(CAR, i) == index) {
-			deleteListing(CAR, i);
-		}
-	}
-
-	for (int i = 0; i < motorcycleListings.size(); i++) {
-		if (getListingOwnerIndexWithIndex(MOTORCYCLE, i) == index) {
-			deleteListing(MOTORCYCLE, i);
-		}
-	}
-
-	delete owners[index];
-	owners.erase(owners.begin() + index);
 }
 
 void Dealership::addCarListing(string brand, string model, int productionYear, string registrationNumber, int horsePower, string fuelType,
 	string gearboxType, string driveType, int fuelConsumption, int trunkCapacity, int seatNumber, string bodyType,
-	int ownerIndex, int price, bool sold) {
+	string ownerName, int price, bool sold) {
 	carListings.push_back(new Listing(brand, model, productionYear, registrationNumber,
-		horsePower, fuelType, gearboxType, driveType, fuelConsumption, trunkCapacity, seatNumber, bodyType, ownerIndex, price, sold));
+		horsePower, fuelType, gearboxType, driveType, fuelConsumption, trunkCapacity, seatNumber, bodyType, ownerName, price, sold));
 }
 
 void Dealership::addMotorcycleListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower, std::string fuelType,
 	std::string gearboxType, std::string driveType, int fuelConsumption, int engineSize, int topSpeed, std::string type,
-	std::string brakeType, int ownerIndex, int price, bool sold) {
+	std::string brakeType, string ownerName, int price, bool sold) {
 	motorcycleListings.push_back(new Listing(brand, model, productionYear, registrationNumber,
-		horsePower, fuelType, gearboxType, driveType, fuelConsumption, engineSize, topSpeed, type, brakeType, ownerIndex, price, sold));
+		horsePower, fuelType, gearboxType, driveType, fuelConsumption, engineSize, topSpeed, type, brakeType, ownerName, price, sold));
 }
 
 void Dealership::deleteListing(vehicleType type, int index) {
-	if (index > owners.size()) {
-		cout << "Listing with this index doesn't exist\n";
-		return;
-	}
-
 	if (type == CAR) {
+		if (index > carListings.size()) {
+			cout << "Listing with this index doesn't exist\n";
+			return;
+		}
 		delete carListings[index];
 		carListings.erase(carListings.begin() + index);
 	}
-	else {
+	else if (type == MOTORCYCLE) {
+		if (index > motorcycleListings.size()) {
+			cout << "Listing with this index doesn't exist\n";
+			return;
+		}
 		delete motorcycleListings[index];
 		motorcycleListings.erase(motorcycleListings.begin() + index);
 	}
@@ -89,14 +92,33 @@ size_t Dealership::getListingsSize(vehicleType type) const {
 	return motorcycleListings.size();
 }
 
-std::string Dealership::getBrandWithIndex(vehicleType type, int i) const {
+string Dealership::getOwnerNameWithIndex(int i) const {
+	auto it = next(ownersMap.begin(), i);
+	return it->second.getName();
+}
+
+string Dealership::getOwnerCityWithIndex(int i) const {
+	auto it = next(ownersMap.begin(), i);
+	return it->second.getCity();
+}
+
+string Dealership::getOwnerStreetWithIndex(int i) const {
+	auto it = next(ownersMap.begin(), i);
+	return it->second.getStreet();
+}
+int Dealership::getOwnerNumberWithIndex(int i) const {
+	auto it = next(ownersMap.begin(), i);
+	return it->second.getNumber();
+}
+
+string Dealership::getBrandWithIndex(vehicleType type, int i) const {
 	if (type == CAR) {
 		return carListings[i]->getBrand();
 	}
 	return motorcycleListings[i]->getBrand();
 }
 
-std::string Dealership::getModelWithIndex(vehicleType type, int i) const {
+string Dealership::getModelWithIndex(vehicleType type, int i) const {
 	if (type == CAR) {
 		return carListings[i]->getModel();
 	}
@@ -110,7 +132,7 @@ int Dealership::getProductionYearWithIndex(vehicleType type, int i) const {
 	return motorcycleListings[i]->getProductionYear();
 }
 
-std::string Dealership::getRegistrationNumberWithIndex(vehicleType type, int i) const {
+string Dealership::getRegistrationNumberWithIndex(vehicleType type, int i) const {
 	if (type == CAR) {
 		return carListings[i]->getRegistrationNumber();
 	}
@@ -124,21 +146,21 @@ int Dealership::getHorsePowerWithIndex(vehicleType type, int i) const {
 	return motorcycleListings[i]->getHorsePower();
 }
 
-std::string Dealership::getFuelTypeWithIndex(vehicleType type, int i) const {
+string Dealership::getFuelTypeWithIndex(vehicleType type, int i) const {
 	if (type == CAR) {
 		return carListings[i]->getFuelType();
 	}
 	return motorcycleListings[i]->getFuelType();
 }
 
-std::string Dealership::getGearboxTypeWithIndex(vehicleType type, int i) const {
+string Dealership::getGearboxTypeWithIndex(vehicleType type, int i) const {
 	if (type == CAR) {
 		return carListings[i]->getGearboxType();
 	}
 	return motorcycleListings[i]->getGearboxType();
 }
 
-std::string Dealership::getDriveTypeWithIndex(vehicleType type, int i) const {
+string Dealership::getDriveTypeWithIndex(vehicleType type, int i) const {
 	if (type == CAR) {
 		return carListings[i]->getDriveType();
 	}
@@ -152,11 +174,13 @@ int Dealership::getFuelConsumptionWithIndex(vehicleType type, int i) const {
 	return motorcycleListings[i]->getFuelConsumption();
 }
 
-int Dealership::getListingOwnerIndexWithIndex(vehicleType type, int i) const {
+string Dealership::getListingOwnerNameWithIndex(vehicleType type, int i) const {
 	if (type == CAR) {
-		return carListings[i]->getOwnerIndex();
+		return carListings[i]->getOwnerName();
 	}
-	return motorcycleListings[i]->getOwnerIndex();
+	else {
+		return motorcycleListings[i]->getOwnerName();
+	}
 }
 
 int Dealership::getListingPriceWithIndex(vehicleType type, int i) const {
@@ -259,14 +283,16 @@ void Dealership::displayListing(vehicleType type, int i) {
 }
 
 int Dealership::countOwnersListings(int index) const {
+	auto it = next(ownersMap.begin(), index);
+	string ownerName = it->second.getName();
 	int count = 0;
 	for (int i = 0; i < getListingsSize(CAR); i++) {
-		if (getListingOwnerIndexWithIndex(CAR, i) == index) {
+		if (getListingOwnerNameWithIndex(CAR, i) == ownerName) {
 			count++;
 		}
 	}
 	for (int i = 0; i < getListingsSize(MOTORCYCLE); i++) {
-		if (getListingOwnerIndexWithIndex(MOTORCYCLE, i) == index) {
+		if (getListingOwnerNameWithIndex(MOTORCYCLE, i) == ownerName) {
 			count++;
 		}
 	}
@@ -291,7 +317,7 @@ std::ofstream& operator<<(std::ofstream& out, const Dealership& dealership) {
 	}
 	out << dealership.getListingsSize(CAR) << '\n';
 	for (int i = 0; i < dealership.getListingsSize(CAR); i++) {
-		out << dealership.getListingOwnerIndexWithIndex(CAR, i) << '\n';
+		out << dealership.getListingOwnerNameWithIndex(CAR, i) << '\n';
 		out << dealership.getBrandWithIndex(CAR, i) << '\n';
 		out << dealership.getModelWithIndex(CAR, i) << '\n';
 		out << dealership.getProductionYearWithIndex(CAR, i) << '\n';
@@ -309,7 +335,7 @@ std::ofstream& operator<<(std::ofstream& out, const Dealership& dealership) {
 	}
 	out << dealership.getListingsSize(MOTORCYCLE) << '\n';
 	for (int i = 0; i < dealership.getListingsSize(MOTORCYCLE); i++) {
-		out << dealership.getListingOwnerIndexWithIndex(MOTORCYCLE, i) << '\n';
+		out << dealership.getListingOwnerNameWithIndex(MOTORCYCLE, i) << '\n';
 		out << dealership.getBrandWithIndex(MOTORCYCLE, i) << '\n';
 		out << dealership.getModelWithIndex(MOTORCYCLE, i) << '\n';
 		out << dealership.getProductionYearWithIndex(MOTORCYCLE, i) << '\n';
@@ -332,8 +358,8 @@ std::ofstream& operator<<(std::ofstream& out, const Dealership& dealership) {
 // Overloaded operator '>>' of a 'Dealership' class to get data from the file
 std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 	int ownersSize, carListingsSize, motorcycleListingsSize;
-	std::string name, city, street, registrationNumber, brand, model, fuelType, gearboxType, driveType, bodyType, type, brakeType;
-	int productionYear, horsePower, fuelConsumption, trunkCapacity, seatNumber, ownerIndex, number, price, engineSize, topSpeed;
+	std::string name, city, street, registrationNumber, brand, model, fuelType, gearboxType, driveType, bodyType, type, brakeType, ownerName;
+	int productionYear, horsePower, fuelConsumption, trunkCapacity, seatNumber, number, price, engineSize, topSpeed;
 	bool sold;
 
 	// Read the number of owners
@@ -355,7 +381,7 @@ std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 
 	// Read the car data and add them to the dealership as listings
 	for (int i = 0; i < carListingsSize; i++) {
-		in >> ownerIndex;
+		std::getline(in, ownerName);
 		in.ignore(); // Ignore the newline character
 		std::getline(in, brand);
 		std::getline(in, model);
@@ -379,7 +405,7 @@ std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 		in >> sold;
 		in.ignore(); // Ignore the newline character
 		dealership.addCarListing(brand, model, productionYear, registrationNumber, horsePower,
-			fuelType, gearboxType, driveType, fuelConsumption, trunkCapacity, seatNumber, bodyType, ownerIndex, price, sold);
+			fuelType, gearboxType, driveType, fuelConsumption, trunkCapacity, seatNumber, bodyType, ownerName, price, sold);
 	}
 
 	// Read the number of listings
@@ -387,7 +413,7 @@ std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 
 	// Read the motorcycle data and add them to the dealership as listings
 	for (int i = 0; i < motorcycleListingsSize; i++) {
-		in >> ownerIndex;
+		std::getline(in, ownerName);
 		in.ignore(); // Ignore the newline character
 		std::getline(in, brand);
 		std::getline(in, model);
@@ -412,7 +438,7 @@ std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 		in >> sold;
 		in.ignore(); // Ignore the newline character
 		dealership.addMotorcycleListing(brand, model, productionYear, registrationNumber, horsePower,
-			fuelType, gearboxType, driveType, fuelConsumption, engineSize, topSpeed, type, brakeType, ownerIndex, price, sold);
+			fuelType, gearboxType, driveType, fuelConsumption, engineSize, topSpeed, type, brakeType, ownerName, price, sold);
 	}
 
 	return in;

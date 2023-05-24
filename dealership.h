@@ -8,8 +8,16 @@ enum vehicleType {
 	MOTORCYCLE
 };
 
+// Custom comparator for the ownersMap map
+struct OwnerComparator {
+	bool operator()(const std::string& a, const std::string& b) const {
+		return a < b;
+	}
+};
+
 class Dealership {
-	std::vector<Owner*>owners;
+	//std::vector<Owner*>owners;
+	std::map<std::string, Owner, OwnerComparator> ownersMap;
 	std::vector<Listing*> carListings;
 	std::vector<Listing*> motorcycleListings;
 	vehicleType typeChoice = CAR;
@@ -22,28 +30,28 @@ public:
 	void operator=(Dealership const&) = delete;
 
 	// Methods that are using arrays of pointers
-	void addOwner(std::string name, std::string city, std::string ulica, int numer);
+	void addOwner(std::string name, std::string city, std::string street, int number);
 	void deleteOwner(int index);
 
 	void addCarListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower, std::string fuelType,
 		std::string gearboxType, std::string driveType, int fuelConsumption, int trunkCapacity, int seatNumber, std::string bodyType,
-		int ownerIndex, int price, bool sold);
+		std::string ownerName, int price, bool sold);
 	void addMotorcycleListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower, std::string fuelType,
 		std::string gearboxType, std::string driveType, int fuelConsumption, int engineSize, int topSpeed, std::string type,
-		std::string brakeType, int ownerIndex, int price, bool sold);
+		std::string brakeType, std::string ownerName, int price, bool sold);
 
 	void deleteListing(vehicleType type, int index);
 
 	// Getters
-	size_t getOwnersSize() const { return owners.size(); }
+	size_t getOwnersSize() const { return ownersMap.size(); }
 	size_t getListingsSize(vehicleType type) const;
 	vehicleType getChosenVehicleType() const { return typeChoice; }
 	int getTypeCounter() { return typeCounter; }
 
-	std::string getOwnerNameWithIndex(int i) const { return owners[i]->getName(); }
-	std::string getOwnerCityWithIndex(int i) const { return owners[i]->getCity(); }
-	std::string getOwnerStreetWithIndex(int i) const { return owners[i]->getStreet(); }
-	int getOwnerNumberWithIndex(int i) const { return owners[i]->getNumber(); }
+	std::string getOwnerNameWithIndex(int i) const;
+	std::string getOwnerCityWithIndex(int i) const;
+	std::string getOwnerStreetWithIndex(int i) const;
+	int getOwnerNumberWithIndex(int i) const;
 
 	std::string getBrandWithIndex(vehicleType type, int i) const;
 	std::string getModelWithIndex(vehicleType type, int i) const;
@@ -66,7 +74,7 @@ public:
 	std::string getTypeWithIndex(int i) const { return motorcycleListings[i]->getType(); }
 	std::string getBrakeTypeWithIndex(int i) const { return motorcycleListings[i]->getBrakeType(); }
 
-	int getListingOwnerIndexWithIndex(vehicleType type, int i) const;
+	std::string getListingOwnerNameWithIndex(vehicleType type, int i) const;
 
 	int getListingPriceWithIndex(vehicleType type, int i) const;
 

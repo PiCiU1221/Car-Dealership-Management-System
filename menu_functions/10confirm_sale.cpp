@@ -26,7 +26,7 @@ void confirmSale(Dealership& dealership) {
 
 			cout << "| " << i << right << setfill(' ') << setw(5 - to_string(i).size()) << "" << " | ";
 
-			string ownerName = dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(vehicleChoice, i));
+			string ownerName = dealership.getListingOwnerNameWithIndex(vehicleChoice, i);
 			cout << ownerName << right << setfill(' ') << setw(12 - ownerName.size()) << "" << " | ";
 
 			string brand = dealership.getBrandWithIndex(vehicleChoice, i);

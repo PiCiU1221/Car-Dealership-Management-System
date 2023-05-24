@@ -13,7 +13,6 @@ protected:
 	std::string gearboxType = "";
 	std::string driveType = "";
 	int fuelConsumption = 0;
-
 public:
 	// default constructor
 	Vehicle();

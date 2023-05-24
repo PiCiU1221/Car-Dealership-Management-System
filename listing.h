@@ -4,18 +4,18 @@
 
 class Listing {
 	Vehicle* vehicle_ = nullptr;
-	int ownerIndex = 0;
+	std::string ownerName = "";
 	int price = 0;
 	bool sold = false;
 public:
 	// Car
 	Listing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower, std::string fuelType,
 		std::string gearboxType, std::string driveType, int fuelConsumption, int trunkCapacity, int seatNumber, std::string bodyType,
-		int ownerIndex, int price, bool sold);
+		std::string ownerName, int price, bool sold);
 	// Motocycle
 	Listing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower, std::string fuelType,
 		std::string gearboxType, std::string driveType, int fuelConsumption, int engineSize, int topSpeed, std::string type,
-		std::string brakeType, int ownerIndex, int price, bool sold);
+		std::string brakeType, std::string ownerName, int price, bool sold);
 	~Listing();
 
 	// Getters
@@ -40,7 +40,7 @@ public:
 	std::string getType() const { return vehicle_->getType(); }
 	std::string getBrakeType() const { return vehicle_->getBrakeType(); }
 
-	int getOwnerIndex() const { return ownerIndex; }
+	std::string getOwnerName() const { return ownerName; }
 	int getPrice() const { return price; }
 	bool isSold() const { return sold; }
 
@@ -66,7 +66,7 @@ public:
 	void setType(std::string type) { vehicle_->setType(type); }
 	void setBrakeType(std::string brakeType) { vehicle_->setBrakeType(brakeType); }
 
-	void setOwner(int i) { this->ownerIndex = i; }
+	void setOwner(std::string ownerName) { this->ownerName = ownerName; }
 	void setPrice(int price) { this->price = price; }
 	void setSold() { this->sold = true; }
 

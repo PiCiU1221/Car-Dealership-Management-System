@@ -18,7 +18,7 @@ void displayAllListings(Dealership& dealership) {
 			cout << left << setw(29 - to_string(i + 1).size()) << setfill('=') << "" << " " << i + 1 << ". Listing " << right << setw(28) << setfill('=') << "" << endl;
 
 			dealership.displayListing(vehicleChoice, i);
-			cout << "                         Owner: " << dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(vehicleChoice, i)) << endl << endl << endl;
+			cout << "                         Owner: " << dealership.getListingOwnerNameWithIndex(vehicleChoice, i) << endl << endl << endl;
 		}
 	}
 
@@ -30,7 +30,7 @@ void displayAllListings(Dealership& dealership) {
 			cout << left << setw(29 - to_string(i + 1).size()) << setfill('=') << "" << " " << i + 1 << ". Listing " << right << setw(28) << setfill('=') << "" << endl;
 
 			dealership.displayListing(vehicleChoice, i);
-			cout << "                         Owner: " << dealership.getOwnerNameWithIndex(dealership.getListingOwnerIndexWithIndex(vehicleChoice, i)) << endl << endl << endl;
+			cout << "                         Owner: " << dealership.getListingOwnerNameWithIndex(vehicleChoice, i) << endl << endl << endl;
 		}
 	}
 
