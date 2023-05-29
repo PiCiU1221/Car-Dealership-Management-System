@@ -39,18 +39,19 @@ void menu(Dealership& dealership) {
 		cout << "  8 ] Display listings\n";
 		cout << "  9 ] Search through listings\n";
 		cout << " 10 ] Confirm sale\n";
-		cout << " 11 ] Display amount of owners and listings\n\n";
-		cout << " 12 ] Save to a file\n";
-		cout << " 13 ] Load from a file\n\n";
+		cout << " 11 ] Number of vehicles from specified city\n";
+		cout << " 12 ] Display amount of owners and listings\n\n";
+		cout << " 13 ] Save to a file\n";
+		cout << " 14 ] Load from a file\n\n";
 		cout << "  0 ] Exit\n\n";
 
 		cin.clear();
 		cin >> choice;
 
-		if (!(choice >= 0 && (choice <= 13 || choice == 99))) {
+		if (!(choice >= 0 && (choice <= 14 || choice == 99))) {
 			displayIncorrectNumberMessage();
 		}
-	} while (!(choice >= 0 && (choice <= 13 || choice == 99)));
+	} while (!(choice >= 0 && (choice <= 14 || choice == 99)));
 
 	switch (choice) {
 	case 0:
@@ -87,12 +88,15 @@ void menu(Dealership& dealership) {
 		confirmSale(dealership);
 		break;
 	case 11:
-		usageOfAnOverloadedOperator(dealership);
+		vehicleNumberFromCities(dealership);
 		break;
 	case 12:
-		saveToAFile(dealership);
+		usageOfAnOverloadedOperator(dealership);
 		break;
 	case 13:
+		saveToAFile(dealership);
+		break;
+	case 14:
 		loadDataFromAFile(dealership);
 		break;
 	case 99:

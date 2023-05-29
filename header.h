@@ -14,6 +14,8 @@
 #include <sstream>
 #include <iomanip>
 #include <map>
+#include <list>
+#include <iterator>
 
 #include "owner.h"
 #include "vehicle.h"
@@ -61,6 +63,7 @@ void deleteUserListing(Dealership& dealership);
 void displayAllListings(Dealership& dealership);
 void searchThroughListings(Dealership& dealership);
 void confirmSale(Dealership& dealership);
+void vehicleNumberFromCities(Dealership& dealership);
 void usageOfAnOverloadedOperator(Dealership& dealership);
 void saveToAFile(Dealership& dealership);
 void loadDataFromAFile(Dealership& dealership);
