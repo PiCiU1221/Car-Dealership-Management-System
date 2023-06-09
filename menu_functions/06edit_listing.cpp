@@ -32,7 +32,7 @@ void editListing(Dealership& dealership) {
 
 		// Using the [] overloaded operator
 		// pushBackForMotorcycles because in order to use the [] operator we have to skip the car indexes
-		Listing* listing_ = dealership[i + pushBackForMotorcycles];
+		const shared_ptr<Listing>& listing_ = dealership[i + pushBackForMotorcycles];
 
 		cout << "| " << i << right << setfill(' ') << setw(5 - to_string(i).size()) << "" << " | ";
 

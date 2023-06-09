@@ -10,16 +10,6 @@ using namespace std;
 	File that contains some of the functions used in the other files
 */
 
-// Usage of overloaded operator '<<' for a 'Dealership' object
-void usageOfAnOverloadedOperator(Dealership& dealership) {
-	cout << "\n" << setfill('=') << setw(68) << "=\n\n";
-	cout << dealership;
-	cout << "\n    Press ENTER to go back to the menu\n";
-	cout << "\n" << setfill('=') << setw(67) << "=\n";
-	cin.ignore();
-	cin.get();
-}
-
 // Writing to a file using the overloaded operator '<<' for a 'Dealership' object
 void saveToAFile(Dealership& dealership) {
 	std::ofstream outFile("Dealership.txt");

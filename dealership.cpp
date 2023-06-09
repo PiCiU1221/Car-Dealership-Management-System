@@ -11,16 +11,6 @@ Dealership& Dealership::instance() {
 	return INSTANCE;
 }
 
-Dealership::~Dealership() {
-	for (auto listing : carListings) {
-		delete listing;
-	}
-
-	for (auto listing : motorcycleListings) {
-		delete listing;
-	}
-}
-
 void Dealership::addOwner(string name, string city, string street, int number) {
 	ownersMap.insert(std::make_pair(name, Owner(name, city, street, number)));
 }
@@ -54,14 +44,14 @@ void Dealership::deleteOwner(int index) {
 void Dealership::addCarListing(string brand, string model, int productionYear, string registrationNumber, int horsePower, string fuelType,
 	string gearboxType, string driveType, int fuelConsumption, int trunkCapacity, int seatNumber, string bodyType,
 	string ownerName, int price, bool sold) {
-	carListings.push_back(new Listing(brand, model, productionYear, registrationNumber,
+	carListings.push_back(make_shared<Listing>(brand, model, productionYear, registrationNumber,
 		horsePower, fuelType, gearboxType, driveType, fuelConsumption, trunkCapacity, seatNumber, bodyType, ownerName, price, sold));
 }
 
 void Dealership::addMotorcycleListing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower, std::string fuelType,
 	std::string gearboxType, std::string driveType, int fuelConsumption, int engineSize, int topSpeed, std::string type,
 	std::string brakeType, string ownerName, int price, bool sold) {
-	motorcycleListings.push_back(new Listing(brand, model, productionYear, registrationNumber,
+	motorcycleListings.push_back(make_shared<Listing>(brand, model, productionYear, registrationNumber,
 		horsePower, fuelType, gearboxType, driveType, fuelConsumption, engineSize, topSpeed, type, brakeType, ownerName, price, sold));
 }
 
@@ -71,7 +61,6 @@ void Dealership::deleteListing(vehicleType type, int index) {
 			cout << "Listing with this index doesn't exist\n";
 			return;
 		}
-		delete carListings[index];
 		carListings.erase(carListings.begin() + index);
 	}
 	else if (type == MOTORCYCLE) {
@@ -79,7 +68,6 @@ void Dealership::deleteListing(vehicleType type, int index) {
 			cout << "Listing with this index doesn't exist\n";
 			return;
 		}
-		delete motorcycleListings[index];
 		motorcycleListings.erase(motorcycleListings.begin() + index);
 	}
 }
@@ -299,6 +287,15 @@ int Dealership::countOwnersListings(int index) const {
 	return count;
 }
 
+bool Dealership::checkIfOwnerExists(string username) {
+	auto it = ownersMap.find(username);
+
+	if (it != ownersMap.end()) {
+		return true;
+	}
+	return false;
+}
+
 // Overloaded operator '<<' of a 'Dealership' class
 std::ostream& operator<<(std::ostream& out, const Dealership& dealership) {
 	out << "\t" << "Number of owners: " << dealership.getOwnersSize()
@@ -445,7 +442,7 @@ std::ifstream& operator>>(std::ifstream& in, Dealership& dealership) {
 }
 
 // Overloading operator '[]' of a 'Dealership' class
-Listing* Dealership::operator [](const size_t k) {
+shared_ptr<Listing> Dealership::operator [](const size_t k) {
 	if (k < carListings.size()) {
 		return carListings[k];
 	}

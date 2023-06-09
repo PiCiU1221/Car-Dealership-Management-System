@@ -16,6 +16,7 @@
 #include <map>
 #include <list>
 #include <iterator>
+#include <numeric>
 
 #include "owner.h"
 #include "vehicle.h"
@@ -65,6 +66,8 @@ void searchThroughListings(Dealership& dealership);
 void confirmSale(Dealership& dealership);
 void vehicleNumberFromCities(Dealership& dealership);
 void usageOfAnOverloadedOperator(Dealership& dealership);
+void checkIfOwnerExists(Dealership& dealership);
+void displayPrices(Dealership& dealership);
 void saveToAFile(Dealership& dealership);
 void loadDataFromAFile(Dealership& dealership);
 

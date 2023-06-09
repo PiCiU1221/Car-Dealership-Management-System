@@ -40,18 +40,20 @@ void menu(Dealership& dealership) {
 		cout << "  9 ] Search through listings\n";
 		cout << " 10 ] Confirm sale\n";
 		cout << " 11 ] Number of vehicles from specified city\n";
-		cout << " 12 ] Display amount of owners and listings\n\n";
-		cout << " 13 ] Save to a file\n";
-		cout << " 14 ] Load from a file\n\n";
+		cout << " 12 ] Display amount of owners and listings\n";
+		cout << " 13 ] Check if the owner exists\n";
+		cout << " 14 ] Display the summed up price of listings\n\n";
+		cout << " 15 ] Save to a file\n";
+		cout << " 16 ] Load from a file\n\n";
 		cout << "  0 ] Exit\n\n";
 
 		cin.clear();
 		cin >> choice;
 
-		if (!(choice >= 0 && (choice <= 14 || choice == 99))) {
+		if (!(choice >= 0 && (choice <= 16 || choice == 99))) {
 			displayIncorrectNumberMessage();
 		}
-	} while (!(choice >= 0 && (choice <= 14 || choice == 99)));
+	} while (!(choice >= 0 && (choice <= 16 || choice == 99)));
 
 	switch (choice) {
 	case 0:
@@ -94,9 +96,15 @@ void menu(Dealership& dealership) {
 		usageOfAnOverloadedOperator(dealership);
 		break;
 	case 13:
-		saveToAFile(dealership);
+		checkIfOwnerExists(dealership);
 		break;
 	case 14:
+		displayPrices(dealership);
+		break;
+	case 15:
+		saveToAFile(dealership);
+		break;
+	case 16:
 		loadDataFromAFile(dealership);
 		break;
 	case 99:

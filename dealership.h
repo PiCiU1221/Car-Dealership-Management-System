@@ -18,13 +18,12 @@ struct OwnerComparator {
 class Dealership {
 	//std::vector<Owner*>owners;
 	std::map<std::string, Owner, OwnerComparator> ownersMap;
-	std::vector<Listing*> carListings;
-	std::vector<Listing*> motorcycleListings;
+	std::vector<std::shared_ptr<Listing>> carListings;
+	std::vector<std::shared_ptr<Listing>> motorcycleListings;
 	vehicleType typeChoice = CAR;
 	static int typeCounter;
 	Dealership();
 public:
-	~Dealership();
 	static Dealership& instance();
 	Dealership(Dealership const&) = delete;
 	void operator=(Dealership const&) = delete;
@@ -111,10 +110,12 @@ public:
 	int countOwnersListings(int index) const;
 	void displayListing(vehicleType type, int i);
 
+	bool checkIfOwnerExists(std::string username);
+
 	friend std::ostream& operator<<(std::ostream&, const Dealership&);
 	friend std::ofstream& operator<<(std::ofstream&, const Dealership&);
 	friend std::ifstream& operator>>(std::ifstream& in, Dealership& dealership);
-	Listing* operator [](const size_t);
+	std::shared_ptr<Listing> operator [](const size_t);
 };
 
 #endif // DEALERSHIP_H

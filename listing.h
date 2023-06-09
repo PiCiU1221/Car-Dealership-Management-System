@@ -3,7 +3,7 @@
 #pragma once
 
 class Listing {
-	Vehicle* vehicle_ = nullptr;
+	std::unique_ptr<Vehicle> vehicle_;
 	std::string ownerName = "";
 	int price = 0;
 	bool sold = false;
@@ -16,7 +16,6 @@ public:
 	Listing(std::string brand, std::string model, int productionYear, std::string registrationNumber, int horsePower, std::string fuelType,
 		std::string gearboxType, std::string driveType, int fuelConsumption, int engineSize, int topSpeed, std::string type,
 		std::string brakeType, std::string ownerName, int price, bool sold);
-	~Listing();
 
 	// Getters
 	std::string getBrand() const { return vehicle_->brand; }
